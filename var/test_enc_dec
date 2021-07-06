@@ -1,0 +1,36 @@
+static void	ft_encode_decode(char *str, int pid)
+{
+	unsigned char	op;
+	unsigned char	sigbit;
+	int				i;
+
+	i = 0;
+	while (str[i])
+	{
+		op = 128;
+		sigbit = 0;
+		while (op)
+		{
+			if (str[i] & op)
+			{
+				ft_printf("%d", 1);
+				kill(pid, SIGUSR1);
+				sigbit |= 1;
+			}
+			else
+			{
+				ft_printf("%d", 0);
+				kill(pid, SIGUSR2);
+			}
+			op >>= 1;
+			if (op)
+				sigbit <<= 1;
+			usleep(5);
+		}
+		usleep(15);
+		ft_printf(" %c\n", sigbit);
+		ft_printf("\n");
+		i++;
+	}
+	ft_eot(pid);
+}
